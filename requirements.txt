@@ -1,0 +1,7 @@
+moviepy>=1.0
+whisper-timestamped
+torch
+ffmpeg-python
+numpy
+tqdm
+openai-whisper
