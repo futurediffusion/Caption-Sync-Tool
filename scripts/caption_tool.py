@@ -21,9 +21,12 @@ from typing import Iterable, List, Tuple
 
 from moviepy.editor import (
     CompositeVideoClip,
-    TextClip,
+    ImageClip,
     VideoFileClip,
 )
+
+from PIL import Image, ImageDraw, ImageFont
+import numpy as np
 
 TOOLS_ROOT = Path(__file__).resolve().parents[1] / "tools" / "whisper-timestamped"
 if TOOLS_ROOT.exists():
@@ -33,6 +36,46 @@ import whisper_timestamped as whisper_ts
 
 
 WordTimestamp = Tuple[str, float, float]
+
+
+def _create_text_clip(
+    text: str,
+    font_size: int,
+    font: str,
+    color: str,
+    stroke_color: str = "black",
+    stroke_width: int = 2,
+) -> ImageClip:
+    """Render ``text`` to an :class:`ImageClip` using Pillow."""
+
+    try:
+        font_obj = ImageFont.truetype(font, font_size)
+    except OSError:
+        font_obj = ImageFont.load_default()
+
+    dummy = Image.new("RGBA", (1, 1))
+    draw_dummy = ImageDraw.Draw(dummy)
+    text_width, text_height = draw_dummy.textsize(text, font=font_obj)
+
+    img = Image.new(
+        "RGBA",
+        (
+            text_width + stroke_width * 2 + 10,
+            text_height + stroke_width * 2 + 10,
+        ),
+        (0, 0, 0, 0),
+    )
+    draw = ImageDraw.Draw(img)
+    draw.text(
+        (stroke_width + 5, stroke_width + 5),
+        text,
+        font=font_obj,
+        fill=color,
+        stroke_width=stroke_width,
+        stroke_fill=stroke_color,
+    )
+
+    return ImageClip(np.array(img))
 
 
 def transcribe_audio(video_path: str, model_name: str = "base") -> List[WordTimestamp]:
@@ -97,9 +140,9 @@ def _create_base_group_clip(
     Returns the clip and a list with the ``x`` position for each word."""
 
     word_clips = [
-        TextClip(
+        _create_text_clip(
             w[0],
-            fontsize=font_size,
+            font_size=font_size,
             font=font,
             color="white",
             stroke_color="black",
@@ -151,9 +194,9 @@ def create_caption_clips(
         clips.append(base_clip)
 
         for idx, (text, start, end) in enumerate(words):
-            highlight = TextClip(
+            highlight = _create_text_clip(
                 text,
-                fontsize=font_size,
+                font_size=font_size,
                 font=font,
                 color="#00FF00",
                 stroke_color="black",
@@ -237,4 +280,5 @@ if __name__ == "__main__":  # pragma: no cover
             for video in example_videos:
                 print(f"[+] Processing example video: {video.name}")
                 process_video(str(video), args.model, args.font_size, args.font)
+
 
