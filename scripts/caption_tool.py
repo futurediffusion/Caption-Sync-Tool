@@ -213,5 +213,28 @@ if __name__ == "__main__":  # pragma: no cover
     if args.video:
         process_video(args.video, args.model, args.font_size, args.font)
     else:
-        print("No input video provided. Exiting.")
+        examples_dir = Path(__file__).resolve().parents[1] / "examples"
+        supported_exts = {
+            ".mp4",
+            ".mov",
+            ".avi",
+            ".mkv",
+            ".webm",
+            ".flv",
+            ".ogv",
+            ".m4v",
+        }
+
+        example_videos = [
+            p
+            for p in examples_dir.glob("*")
+            if p.suffix.lower() in supported_exts and p.is_file()
+        ]
+
+        if not example_videos:
+            print("No input video provided and no videos found in 'examples/'. Exiting.")
+        else:
+            for video in example_videos:
+                print(f"[+] Processing example video: {video.name}")
+                process_video(str(video), args.model, args.font_size, args.font)
 
