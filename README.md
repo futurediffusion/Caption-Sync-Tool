@@ -118,6 +118,10 @@ If instructed or requested later, create a basic GUI using `PySimpleGUI` with:
 python scripts/caption_tool.py path/to/video.mp4 --font-size 192
 ```
 
+If the specified font is unavailable, the tool automatically falls back to
+``DejaVuSans.ttf``. Use the ``--font`` option to supply another font name or a
+path to a ``.ttf`` file.
+
 ---
 
 > This repo is fully prepped. Get to work, Codex. Do it clean. Deliver subtitles that sing 🎤

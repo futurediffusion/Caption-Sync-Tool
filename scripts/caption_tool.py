@@ -51,7 +51,10 @@ def _create_text_clip(
     try:
         font_obj = ImageFont.truetype(font, font_size)
     except OSError:
-        font_obj = ImageFont.load_default()
+        try:
+            font_obj = ImageFont.truetype("DejaVuSans.ttf", font_size)
+        except OSError:
+            font_obj = ImageFont.load_default()
 
     dummy = Image.new("RGBA", (1, 1))
     draw_dummy = ImageDraw.Draw(dummy)
