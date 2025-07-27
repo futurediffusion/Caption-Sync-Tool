@@ -112,4 +112,12 @@ If instructed or requested later, create a basic GUI using `PySimpleGUI` with:
 
 ---
 
+## Usage
+
+```
+python scripts/caption_tool.py path/to/video.mp4 --font-size 192
+```
+
+---
+
 > This repo is fully prepped. Get to work, Codex. Do it clean. Deliver subtitles that sing 🎤

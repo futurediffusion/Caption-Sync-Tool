@@ -170,7 +170,7 @@ def _create_base_group_clip(
 def create_caption_clips(
     video_clip: VideoFileClip,
     grouped_words: Iterable[dict],
-    font_size: int = 48,
+    font_size: int = 192,
     font: str = "Arial",
 ) -> List[CompositeVideoClip]:
     """Create caption clips highlighting words in sequence."""
@@ -216,7 +216,7 @@ def create_caption_clips(
 def process_video(
     video_path: str,
     model_name: str = "base",
-    font_size: int = 48,
+    font_size: int = 192,
     font: str = "Arial",
 ) -> str | None:
     """Process ``video_path`` and generate a captioned video.
@@ -250,7 +250,7 @@ if __name__ == "__main__":  # pragma: no cover
     parser = argparse.ArgumentParser(description="Generate word-level captions")
     parser.add_argument("video", nargs="?", help="Path to input video")
     parser.add_argument("--model", default="base", help="Whisper model name")
-    parser.add_argument("--font-size", type=int, default=48, dest="font_size")
+    parser.add_argument("--font-size", type=int, default=192, dest="font_size")
     parser.add_argument("--font", default="Arial")
     args = parser.parse_args()
 
