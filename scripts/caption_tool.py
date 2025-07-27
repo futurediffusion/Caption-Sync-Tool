@@ -55,7 +55,8 @@ def _create_text_clip(
 
     dummy = Image.new("RGBA", (1, 1))
     draw_dummy = ImageDraw.Draw(dummy)
-    text_width, text_height = draw_dummy.textsize(text, font=font_obj)
+    bbox = draw_dummy.textbbox((0, 0), text, font=font_obj)
+    text_width, text_height = bbox[2] - bbox[0], bbox[3] - bbox[1]
 
     img = Image.new(
         "RGBA",
